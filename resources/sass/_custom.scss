@@ -1,0 +1,11 @@
+.required:after {
+    content: "*";
+    color: red;
+}
+
+
+.card-header--list {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
