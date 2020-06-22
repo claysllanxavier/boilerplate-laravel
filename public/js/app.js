@@ -37764,6 +37764,9 @@ window.axios.defaults.headers.common["X-Requested-With"] = "XMLHttpRequest";
 
 $(document).ready(function () {
   $.instantiatingInputMask();
+  $("form").submit(function () {
+    $("input").inputmask("remove");
+  });
 });
 
 $.instantiatingInputMask = function () {

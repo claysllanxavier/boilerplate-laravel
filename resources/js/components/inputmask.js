@@ -1,5 +1,9 @@
 $(document).ready(function() {
     $.instantiatingInputMask();
+
+    $("form").submit(function() {
+        $("input").inputmask("remove");
+    });
 });
 
 $.instantiatingInputMask = function() {
