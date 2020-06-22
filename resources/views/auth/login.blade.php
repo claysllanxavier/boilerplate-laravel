@@ -15,6 +15,7 @@
                                 <div class="text-center">
                                     <h1 class="h4 text-gray-900 mb-4">Seja bem-vindo!</h1>
                                 </div>
+                                @include('components.alerts')
                                 <form class="user" method="POST" action="{{ route('login') }}">
                                     @csrf
                                     <div class="form-group">

@@ -37653,7 +37653,7 @@ __webpack_require__(/*! ./bootstrap */ "./resources/js/bootstrap.js");
     }
   });
   $("input[required], select[required], textarea[required]").siblings("label").addClass("required");
-  $("div.alert-close").delay(3000).fadeOut(3000);
+  $("div.alert-close").delay(10000).fadeOut(10000);
   $(".btn-delete").on("click", function (e) {
     var _swal;
 

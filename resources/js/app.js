@@ -92,8 +92,8 @@ require("./bootstrap");
         .addClass("required");
 
     $("div.alert-close")
-        .delay(3000)
-        .fadeOut(3000);
+        .delay(10000)
+        .fadeOut(10000);
 
     $(".btn-delete").on("click", function(e) {
         e.preventDefault();
