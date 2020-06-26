@@ -27,9 +27,7 @@ class UserSeeder extends Seeder
         $user = User::create([
             'email' => 'admin@app.com',
             'name'  => 'Usuário Administrador',
-            'password' => bcrypt('admin'),
-            'cpf' => '00000000000',
-            'phone' => '00000000000'
+            'password' => bcrypt('admin')
         ]);
 
         $user->assignRole('administrador');
