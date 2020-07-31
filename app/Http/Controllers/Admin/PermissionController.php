@@ -5,11 +5,21 @@ namespace App\Http\Controllers\Admin;
 use Exception;
 use App\Models\Permission;
 use App\Http\Controllers\Controller;
+use App\Services\PermissionService;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 
 class PermissionController extends Controller
 {
+
+    protected $permissionService;
+
+    public function __construct(
+        PermissionService $permissionService
+    ) {
+        $this->permissionService = $permissionService;
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -17,7 +27,7 @@ class PermissionController extends Controller
      */
     public function index()
     {
-        $permissions = Permission::orderBy('description')->paginate(25);
+        $permissions = $this->permissionService->all();
 
         return view('permissions.index', compact('permissions'));
     }
@@ -40,13 +50,7 @@ class PermissionController extends Controller
      */
     public function store(Request $request)
     {
-        $this->validate($request,  $this->rules($request));
-
-        Permission::create([
-            'name' => $request->name,
-            'description' => $request->description,
-            'guard_name' => 'web'
-        ]);
+        $this->permissionService->save($request->all(), $this->rules($request));
 
         return redirect()->route('permissions.index')
             ->with('success', 'Registro adicionado com sucesso.');
@@ -60,7 +64,7 @@ class PermissionController extends Controller
      */
     public function show($id)
     {
-        $permission = Permission::findOrFail($id);
+        $permission = $this->permissionService->find($id);
 
         return view('permissions.show', compact('permission'));
     }
@@ -73,7 +77,7 @@ class PermissionController extends Controller
      */
     public function edit($id)
     {
-        $permission = Permission::findOrFail($id);
+        $permission = $this->permissionService->find($id);
 
         return view('permissions.edit', compact('permission'));
     }
@@ -87,11 +91,11 @@ class PermissionController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $permission = Permission::findOrFail($id);
-
-        $this->validate($request, $this->rules($request, $id));
-
-        $permission->fill($request->all())->save();
+        $this->permissionService->update(
+            $id,
+            $request->all(),
+            $this->rules($request, $id)
+        );
 
         return redirect()->route('permissions.index')
             ->with('success', 'Registro atualizado com sucesso.');
@@ -105,9 +109,8 @@ class PermissionController extends Controller
      */
     public function destroy($id)
     {
-        $permission = Permission::findOrFail($id);
         try {
-            $permission->delete();
+            $this->permissionService->delete($id);
             return redirect()->route('permissions.index')
                 ->with('success', 'Registro atualizado com sucesso.');
         } catch (Exception $e) {
