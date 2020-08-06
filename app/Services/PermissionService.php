@@ -2,7 +2,7 @@
 
 namespace App\Services;
 
-use App\Repositories\Eloquent\PermissionRepository;
+use App\Repositories\Interfaces\PermissionRepositoryInterface;
 use Illuminate\Support\Facades\Validator;
 
 
@@ -11,7 +11,7 @@ class PermissionService
     protected $permissionRepository;
 
     public function __construct(
-        PermissionRepository $permissionRepository
+        PermissionRepositoryInterface $permissionRepository
     ) {
         $this->permissionRepository = $permissionRepository;
     }

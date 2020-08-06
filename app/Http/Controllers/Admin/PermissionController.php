@@ -3,31 +3,21 @@
 namespace App\Http\Controllers\Admin;
 
 use Exception;
-use App\Models\Permission;
 use App\Http\Controllers\Controller;
-use App\Services\PermissionService;
+use App\Services\Permission\ListPaginatePermissions;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 
 class PermissionController extends Controller
 {
-
-    protected $permissionService;
-
-    public function __construct(
-        PermissionService $permissionService
-    ) {
-        $this->permissionService = $permissionService;
-    }
-
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(ListPaginatePermissions $action)
     {
-        $permissions = $this->permissionService->all();
+        $permissions = $action->execute();
 
         return view('permissions.index', compact('permissions'));
     }
