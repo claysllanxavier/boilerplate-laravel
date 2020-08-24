@@ -30,9 +30,9 @@ class BaseRepository implements EloquentRepositoryInterface
      *  Get all resources
      * @return Collection
      */
-    public function all(): Collection
+    public function getAll($columns = array('*')): Collection
     {
-        return $this->model->all();
+        return $this->model->all($columns);
     }
 
     /**
@@ -41,9 +41,9 @@ class BaseRepository implements EloquentRepositoryInterface
      * @param int $count
      * @return Collection
      */
-    public function paginate(int $count = 25): LengthAwarePaginator
+    public function getPaginated(int $perPage = 25, $columns = array('*')): LengthAwarePaginator
     {
-        return $this->model->paginate($count);
+        return $this->model->paginate($perPage, $columns);
     }
 
     /**
@@ -51,9 +51,9 @@ class BaseRepository implements EloquentRepositoryInterface
      * @param $id
      * @return Model
      */
-    public function find(int $id): ?Model
+    public function findOne(int $id, $columns = array('*')): ?Model
     {
-        return $this->model->findOrFail($id);
+        return $this->model->find($id, $columns);
     }
 
     /**

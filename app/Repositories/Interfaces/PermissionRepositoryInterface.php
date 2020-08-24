@@ -18,14 +18,14 @@ interface PermissionRepositoryInterface
      * @param int $count
      * @return Collection
      */
-    public function paginate(int $count = 25): LengthAwarePaginator;
+    public function getPaginated(int $perPage = 25, $columns = array('*')): LengthAwarePaginator;
 
     /**
      * Get resource
      * @param $id
      * @return Model
      */
-    public function find(int $id): ?Model;
+    public function findOne(int $id, $columns = array('*')): ?Model;
 
     /**
      * @param array $attributes

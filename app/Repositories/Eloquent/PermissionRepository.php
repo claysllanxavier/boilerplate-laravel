@@ -14,10 +14,4 @@ class PermissionRepository extends BaseRepository implements PermissionRepositor
     {
         parent::__construct($permission);
     }
-
-    public function create(array $attributes): Model
-    {
-        $attributes['guard_name'] = 'web';
-        return $this->permission->create($attributes);
-    }
 }

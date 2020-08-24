@@ -11,14 +11,23 @@ use App\Repositories\Eloquent\PermissionRepository;
 class RepositoryServiceProvider extends ServiceProvider
 {
     /**
+     * All of the container bindings that should be registered.
+     *
+     * @var array
+     */
+    public $bindings = [
+        EloquentRepositoryInterface::class => BaseRepository::class,
+        PermissionRepositoryInterface::class => PermissionRepository::class
+    ];
+
+    /**
      * Register services.
      *
      * @return void
      */
     public function register()
     {
-        $this->app->bind(EloquentRepositoryInterface::class, BaseRepository::class);
-        $this->app->bind(PermissionRepositoryInterface::class, PermissionRepository::class);
+        //
     }
 
     /**
