@@ -35,6 +35,15 @@ class PermissionRepositoryTest extends TestCase
         $this->assertArrayHasKey('id', $permissions->toArray()['data'][0]);
     }
 
+    public function testGetPaginatedPermissionsBlank()
+    {
+        $permissions = $this->permissionRepository->getPaginated();
+
+        $this->assertCount(0, $permissions->toArray()['data']);
+        $this->assertEquals(0, $permissions->toArray()['total']);
+        $this->assertEquals(25, $permissions->toArray()['per_page']);
+    }
+
 
     public function testGetPaginatedPermissionsWithThirtyItemsPerPage()
     {
