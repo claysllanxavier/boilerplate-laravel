@@ -39,12 +39,12 @@ interface PermissionRepositoryInterface
      * @param int $id
      * @return Model
      */
-    public function update(int $id, array $attributes): ?Model;
+    public function update(int $id, array $attributes): ?bool;
 
     /**
      * Delete resource
      * @param $id
      * @return bool
      */
-    public function delete(int $id): bool;
+    public function delete(int $id): ?bool;
 }

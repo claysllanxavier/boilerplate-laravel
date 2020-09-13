@@ -15,6 +15,12 @@ class PermissionRepositoryTest extends TestCase
         parent::setUp();
 
         $this->permissionRepository = new PermissionRepository(new Permission());
+
+        $this->payload = [
+            'name' => 'users_view',
+            'description' => 'View users',
+            'guard_name' => 'web'
+        ];
     }
 
 
@@ -145,6 +151,64 @@ class PermissionRepositoryTest extends TestCase
     public function testFindOneNotFoundId()
     {
         $permission = $this->permissionRepository->findOne(1);
+
+        $this->assertNull($permission);
+    }
+
+    public function testCreateInstance()
+    {
+        $permission = $this->permissionRepository->create($this->payload);
+
+        $this->assertIsObject($permission);
+        $this->assertArrayHasKey('id', $permission->toArray());
+        $this->assertArrayHasKey('created_at', $permission->toArray());
+        $this->assertArrayHasKey('updated_at', $permission->toArray());
+        $this->assertEquals($this->payload['name'], $permission->name);
+        $this->assertEquals($this->payload['description'], $permission->description);
+        $this->assertEquals($this->payload['guard_name'], $permission->guard_name);
+    }
+
+
+    public function testUpdateInstance()
+    {
+        $fakePermission = factory(Permission::class)->create();
+
+        $wasChange = $this->permissionRepository->update(
+            $fakePermission->id,
+            $this->payload
+        );
+
+        $updatedPermission = $fakePermission->fresh();
+
+        $this->assertTrue($wasChange);
+        $this->assertArrayHasKey('id', $updatedPermission->toArray());
+        $this->assertArrayHasKey('created_at', $updatedPermission->toArray());
+        $this->assertArrayHasKey('updated_at', $updatedPermission->toArray());
+        $this->assertEquals($this->payload['name'], $updatedPermission->name);
+        $this->assertEquals($this->payload['description'], $updatedPermission->description);
+        $this->assertEquals($this->payload['guard_name'], $updatedPermission->guard_name);
+    }
+
+    public function testUpdateNotFoundId()
+    {
+        $permission = $this->permissionRepository->update(1, $this->payload);
+
+        $this->assertNull($permission);
+    }
+
+    public function testDeleteInstance()
+    {
+        $fakePermission = factory(Permission::class)->create();
+
+        $wasDeleted = $this->permissionRepository->delete($fakePermission->id);
+
+        $this->assertTrue($wasDeleted);
+        $this->assertDatabaseMissing('permissions', $fakePermission->toArray());
+    }
+
+    public function testDeleteNotFoundId()
+    {
+        $permission = $this->permissionRepository->delete(1);
 
         $this->assertNull($permission);
     }
