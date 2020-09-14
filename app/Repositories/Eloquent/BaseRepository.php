@@ -5,7 +5,7 @@ namespace App\Repositories\Eloquent;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Pagination\LengthAwarePaginator;
-use App\Repositories\Interfaces\EloquentRepositoryInterface;
+use App\Contracts\EloquentRepositoryInterface;
 
 
 

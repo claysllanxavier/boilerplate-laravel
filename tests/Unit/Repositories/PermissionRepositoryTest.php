@@ -3,6 +3,7 @@
 namespace Tests\Unit\Repositories;
 
 use App\Models\Permission;
+use App\Contracts\PermissionRepositoryInterface;
 use App\Repositories\Eloquent\PermissionRepository;
 use Tests\TestCase;
 
@@ -14,7 +15,7 @@ class PermissionRepositoryTest extends TestCase
     {
         parent::setUp();
 
-        $this->permissionRepository = new PermissionRepository(new Permission());
+        $this->permissionRepository = resolve(PermissionRepositoryInterface::class);
 
         $this->payload = [
             'name' => 'users_view',

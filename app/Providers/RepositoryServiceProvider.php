@@ -3,8 +3,8 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
-use App\Repositories\Interfaces\EloquentRepositoryInterface;
-use App\Repositories\Interfaces\PermissionRepositoryInterface;
+use App\Contracts\EloquentRepositoryInterface;
+use App\Contracts\PermissionRepositoryInterface;
 use App\Repositories\Eloquent\BaseRepository;
 use App\Repositories\Eloquent\PermissionRepository;
 
