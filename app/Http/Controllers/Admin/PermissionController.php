@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use Exception;
 use App\Http\Controllers\Controller;
-use App\Services\Permission\ListPaginatePermissions;
+use App\Actions\Permission\ListPaginatedPermission;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 
@@ -15,7 +15,7 @@ class PermissionController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(ListPaginatePermissions $action)
+    public function index(ListPaginatedPermission $action)
     {
         $permissions = $action->execute();
 

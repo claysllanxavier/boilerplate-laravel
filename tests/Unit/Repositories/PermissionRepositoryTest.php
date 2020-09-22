@@ -4,7 +4,6 @@ namespace Tests\Unit\Repositories;
 
 use App\Models\Permission;
 use App\Contracts\PermissionRepositoryInterface;
-use App\Repositories\Eloquent\PermissionRepository;
 use Tests\TestCase;
 
 class PermissionRepositoryTest extends TestCase
@@ -123,7 +122,7 @@ class PermissionRepositoryTest extends TestCase
     {
         $fakePermission = factory(Permission::class)->create();
 
-        $permission = $this->permissionRepository->findOne(1);
+        $permission = $this->permissionRepository->findOne($fakePermission->id);
 
         $this->assertEquals($permission->toArray(), $fakePermission->toArray());
         $this->assertArrayHasKey('created_at', $permission->toArray());
@@ -135,10 +134,10 @@ class PermissionRepositoryTest extends TestCase
 
     public function testFindOneAFewColumns()
     {
-        factory(Permission::class)->create();
+        $fakePermission = factory(Permission::class)->create();
 
         $permission = $this->permissionRepository->findOne(
-            1,
+            $fakePermission->id,
             ['id', 'name', 'description']
         );
 
