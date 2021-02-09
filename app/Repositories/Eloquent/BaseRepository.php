@@ -73,10 +73,10 @@ class BaseRepository implements EloquentRepositoryInterface
      */
     public function update(int $id, array $attributes): ?bool
     {
-        $model = $this->model->find($id);
-        if (!$model) return null;
+        $item = $this->model->find($id);
+        if (!$item) null;
 
-        return $model->update($attributes);
+        return $item->fill($attributes)->save();
     }
 
     /**

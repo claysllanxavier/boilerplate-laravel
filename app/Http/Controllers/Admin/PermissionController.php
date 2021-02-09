@@ -5,6 +5,10 @@ namespace App\Http\Controllers\Admin;
 use Exception;
 use App\Http\Controllers\Controller;
 use App\Actions\Permission\ListPaginatedPermission;
+use App\Actions\Permission\CreatePermission;
+use App\Actions\Permission\FindOnePermission;
+use App\Actions\Permission\UpdatePermission;
+use App\Actions\Permission\DeletePermission;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 
@@ -38,9 +42,11 @@ class PermissionController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Request $request, CreatePermission $action)
     {
-        $this->permissionService->save($request->all(), $this->rules($request));
+        $this->validate($request, $this->rules($request));
+
+        $action->execute($request->all());
 
         return redirect()->route('permissions.index')
             ->with('success', 'Registro adicionado com sucesso.');
@@ -52,9 +58,9 @@ class PermissionController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($id, FindOnePermission $action)
     {
-        $permission = $this->permissionService->find($id);
+        $permission = $action->execute($id);
 
         return view('permissions.show', compact('permission'));
     }
@@ -65,9 +71,9 @@ class PermissionController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit($id, FindOnePermission $action)
     {
-        $permission = $this->permissionService->find($id);
+        $permission = $action->execute($id, ['id', 'name', 'description']);
 
         return view('permissions.edit', compact('permission'));
     }
@@ -79,13 +85,11 @@ class PermissionController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, $id, UpdatePermission $action)
     {
-        $this->permissionService->update(
-            $id,
-            $request->all(),
-            $this->rules($request, $id)
-        );
+        $this->validate($request, $this->rules($request, $id));
+
+        $action->execute($id, $request->all());
 
         return redirect()->route('permissions.index')
             ->with('success', 'Registro atualizado com sucesso.');
@@ -97,10 +101,10 @@ class PermissionController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy($id, DeletePermission $action)
     {
         try {
-            $this->permissionService->delete($id);
+            $action->execute($id);
             return redirect()->route('permissions.index')
                 ->with('success', 'Registro atualizado com sucesso.');
         } catch (Exception $e) {
@@ -112,15 +116,12 @@ class PermissionController extends Controller
     private function rules(Request $request, $primaryKey = null, bool $changeMessages = false)
     {
         $rules = [
-            'name' => ['required', 'max:40'],
+            'name' => [
+                'required', 'max:40', Rule::unique('permissions')->ignore($primaryKey)
+            ],
             'description' => ['required', 'string'],
         ];
 
-        if (empty($primaryKey)) {
-            array_push($rules['name'], Rule::unique('permissions'));
-        } else {
-            array_push($rules['name'], Rule::unique('permissions')->ignore($primaryKey));
-        }
 
         $messages = [];
 
