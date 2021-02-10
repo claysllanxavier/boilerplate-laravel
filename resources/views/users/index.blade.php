@@ -21,7 +21,7 @@
                             <thead>
                                 <tr>
                                     <th scope="col">Nome</th>
-                                    <th scope="col">CPF</th>
+                                    <th scope="col">Telefone</th>
                                     <th scope="col">Atribuição</th>
                                     <th scope="col">Ativo</th>
                                     <th scope="col">Ação</th>
@@ -31,7 +31,7 @@
                                 @forelse ($users as $user)
                                 <tr>
                                     <td>{{ $user->name }}</td>
-                                    <td>{{ insertMask($user->cpf, '###.###.###-##') }}</td>
+                                    <td>{{ insertMask($user->phone, '(##) #####-####') }}</td>
                                     <td>{{ $user->role }}</td>
                                     <td>{{ $user->is_enabled ? 'Sim' : 'Não' }}</td>
                                     <td>

@@ -1,15 +1,4 @@
 <div class="row">
-    <div class="col-md-4">
-        <div class="form-group">
-            {{ Form::label('cpf', 'CPF') }}
-            {{ Form::text('cpf', null, [
-                'class' => 'form-control' . ($errors->has('cpf') ? ' is-invalid' : ''),
-                'required',
-                'data-mask' => 'cpf'
-            ]) }}
-            @include('errors.input', ['field' => 'cpf'])
-        </div>
-    </div>
     <div class="col-md-8">
         <div class="form-group">
             {{ Form::label('name', 'Nome') }}
@@ -20,7 +9,7 @@
             @include('errors.input', ['field' => 'name'])
         </div>
     </div>
-    <div class="col-md-3">
+    <div class="col-md-4">
         <div class="form-group">
             {{ Form::label('email', 'Email') }}
             {{ Form::email('email', null, [
@@ -30,7 +19,7 @@
             @include('errors.input', ['field' => 'email'])
         </div>
     </div>
-    <div class="col-md-3">
+    <div class="col-md-4">
         <div class="form-group">
             {{ Form::label('phone', 'Telefone') }}
             {{ Form::text('phone', null, [
@@ -41,7 +30,7 @@
             @include('errors.input', ['field' => 'phone'])
         </div>
     </div>
-    <div class="col-md-3">
+    <div class="col-md-4">
         <div class="form-group">
             {{ Form::label('roles', 'Atribuição') }}
             {{ Form::select('roles', ['' => 'Selecione...'] + $roles->pluck('description', 'id')->all(), null, [
@@ -51,7 +40,7 @@
             @include('errors.input', ['field' => 'roles'])
         </div>
     </div>
-    <div class="col-md-3">
+    <div class="col-md-4">
         <div class="form-group">
             {{ Form::label('is_enabled', 'Ativo') }}
             {{ Form::select('is_enabled', ['' => 'Selecione...', 1 => 'Sim', 0 => 'Não'], null, [

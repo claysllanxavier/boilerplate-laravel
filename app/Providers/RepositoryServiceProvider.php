@@ -6,9 +6,11 @@ use Illuminate\Support\ServiceProvider;
 use App\Contracts\EloquentRepositoryInterface;
 use App\Contracts\PermissionRepositoryInterface;
 use App\Contracts\RoleRepositoryInterface;
+use App\Contracts\UserRepositoryInterface;
 use App\Repositories\Eloquent\BaseRepository;
 use App\Repositories\Eloquent\PermissionRepository;
 use App\Repositories\Eloquent\RoleRepository;
+use App\Repositories\Eloquent\UserRepository;
 
 class RepositoryServiceProvider extends ServiceProvider
 {
@@ -21,6 +23,7 @@ class RepositoryServiceProvider extends ServiceProvider
         EloquentRepositoryInterface::class => BaseRepository::class,
         PermissionRepositoryInterface::class => PermissionRepository::class,
         RoleRepositoryInterface::class => RoleRepository::class,
+        UserRepositoryInterface::class => UserRepository::class,
     ];
 
     /**

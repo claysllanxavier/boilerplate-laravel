@@ -33,6 +33,6 @@ class PermissionRepository extends BaseRepository implements PermissionRepositor
      */
     public function getAll($columns = array('*')): Collection
     {
-        return $this->model->all($columns);
+        return $this->model->orderBy('description')->get($columns);
     }
 }

@@ -2,15 +2,13 @@
 
 namespace App\Http\Controllers\Admin;
 
+use Exception;
 use App\Actions\Permission\GetAllPermission;
 use App\Actions\Role\CreateRole;
 use App\Actions\Role\DeleteRole;
 use App\Actions\Role\FindOneRole;
 use App\Actions\Role\ListPaginatedRole;
 use App\Actions\Role\UpdateRole;
-use Exception;
-use App\Models\Role;
-use App\Models\Permission;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;

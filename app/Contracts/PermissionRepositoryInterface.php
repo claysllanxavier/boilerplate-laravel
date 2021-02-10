@@ -16,7 +16,7 @@ interface PermissionRepositoryInterface
      *  Get paginate resource
      *  Default 25 items for page
      * @param int $count
-     * @return Collection
+     * @return LengthAwarePaginator
      */
     public function getPaginated(int $perPage = 25, $columns = array('*')): LengthAwarePaginator;
 

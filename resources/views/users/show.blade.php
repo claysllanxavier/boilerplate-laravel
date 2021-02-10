@@ -20,14 +20,6 @@
                                 </p>
                             </div>
                         </div>
-                        <div class="card m-1">
-                            <div class="card-body">
-                                <p><strong>CPF: </strong></p>
-                                <p class="card-text">
-                                    {{ insertMask($user->cpf, '###.###.###-##') }}
-                                </p>
-                            </div>
-                        </div>
                     </div>
                     <div class="card-deck">
                         <div class="card m-1">

@@ -2,6 +2,12 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Actions\Role\GetAllRole;
+use App\Actions\User\CreateUser;
+use App\Actions\User\DeleteUser;
+use App\Actions\User\FindOneUser;
+use App\Actions\User\ListPaginatedUser;
+use App\Actions\User\UpdateUser;
 use Exception;
 use App\Models\Role;
 use App\Models\User;
@@ -17,10 +23,9 @@ class UserController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(ListPaginatedUser $action)
     {
-        $users = User::role()->where('users.id', '!=', auth()->id())
-            ->orderBy('users.name')->paginate(25);
+        $users = $action->execute();
 
         return view('users.index', compact('users'));
     }
@@ -30,10 +35,9 @@ class UserController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(GetAllRole $action)
     {
-        $roles = Role::select('id', 'description')
-            ->orderBy('description')->get();
+        $roles = $action->execute();
 
         return view('users.create', compact('roles'));
     }
@@ -44,15 +48,14 @@ class UserController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Request $request, CreateUser $action)
     {
         $this->validate($request, $this->rules($request));
 
         $inputs = $request->except('password');
         $inputs['password'] = bcrypt($request->password);
-        $user = User::create($inputs);
 
-        $user->assignRole($request->roles);
+        $action->execute($inputs);
 
         return redirect()->route('users.index')
             ->with('success', 'Registro adicionado com sucesso.');
@@ -64,9 +67,9 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($id, FindOneUser $action)
     {
-        $user = User::role()->findOrFail($id);
+        $user = $action->execute($id);
 
         return view('users.show', compact('user'));
     }
@@ -77,12 +80,11 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit($id, FindOneUser $action, GetAllRole $roleAction)
     {
-        $user = User::findOrFail($id);
+        $user = $action->execute($id);
 
-        $roles = Role::select('id', 'description')
-            ->orderBy('description')->get();
+        $roles = $roleAction->execute();
 
         return view('users.edit', compact('user', 'roles'));
     }
@@ -94,18 +96,13 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, $id, UpdateUser $action)
     {
-        $user = User::findOrFail($id);
-
         $this->validate($request, $this->rules($request, $id));
 
-        $inputs = $request->except('roles');
+        $inputs = $request->all();
 
-        $user->fill($inputs)->save();
-
-        $user->syncRoles($request->roles);
-
+        $action->execute($id, $inputs);
 
         return redirect()->route('users.index')
             ->with('success', 'Registro atualizado com sucesso.');
@@ -117,11 +114,10 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy($id, DeleteUser $action)
     {
-        $user = User::findOrFail($id);
         try {
-            $user->delete();
+            $action->execute($id);
             return redirect()->route('users.index')
                 ->with('success', 'Registro atualizado com sucesso.');
         } catch (Exception $e) {
@@ -135,19 +131,13 @@ class UserController extends Controller
         $rules = [
             'name' => ['required', 'max:120'],
             'phone' => ['required', 'max:11'],
-            'cpf' => ['required', 'max:11', new Cpf],
-            'email' => ['required', 'email'],
+            'email' => ['required', 'email', Rule::unique('users')->ignore($primaryKey)],
             'is_enabled' => ['required'],
             'roles' => ['required']
         ];
 
         if (empty($primaryKey)) {
-            array_push($rules['email'], Rule::unique('users'));
-            array_push($rules['cpf'], Rule::unique('users'));
             $rules['password'] = ['required', 'min:8', 'confirmed'];
-        } else {
-            array_push($rules['email'], Rule::unique('users')->ignore($primaryKey));
-            array_push($rules['cpf'], Rule::unique('users')->ignore($primaryKey));
         }
 
         $messages = [];

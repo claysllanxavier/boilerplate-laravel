@@ -5,6 +5,7 @@ namespace App\Repositories\Eloquent;
 use App\Models\Role;
 use App\Contracts\RoleRepositoryInterface;
 use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 
 class RoleRepository extends BaseRepository implements RoleRepositoryInterface
@@ -25,6 +26,15 @@ class RoleRepository extends BaseRepository implements RoleRepositoryInterface
     public function getPaginated(int $perPage = 25, $columns = array('*')): LengthAwarePaginator
     {
         return $this->model->orderBy('description')->paginate($perPage, $columns);
+    }
+
+    /**
+     *  Get all resources
+     * @return Collection
+     */
+    public function getAll($columns = array('*')): Collection
+    {
+        return $this->model->orderBy('description')->get($columns);
     }
 
 
