@@ -2,6 +2,12 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Actions\Permission\GetAllPermission;
+use App\Actions\Role\CreateRole;
+use App\Actions\Role\DeleteRole;
+use App\Actions\Role\FindOneRole;
+use App\Actions\Role\ListPaginatedRole;
+use App\Actions\Role\UpdateRole;
 use Exception;
 use App\Models\Role;
 use App\Models\Permission;
@@ -16,9 +22,9 @@ class RoleController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(ListPaginatedRole $action)
     {
-        $roles = Role::orderBy('description')->paginate(25);
+        $roles = $action->execute();
 
         return view('roles.index', compact('roles'));
     }
@@ -28,9 +34,9 @@ class RoleController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(GetAllPermission $action)
     {
-        $permissions = Permission::orderBy('description')->get();
+        $permissions =  $action->execute();
 
         return view('roles.create', compact('permissions'));
     }
@@ -41,15 +47,13 @@ class RoleController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Request $request, CreateRole $action)
     {
         $this->validate($request, $this->rules($request));
 
-        $inputs = $request->except('permissions');
+        $inputs = $request->all();
 
-        $role = Role::create($inputs);
-
-        $role->permissions()->attach($request->permissions);
+        $action->execute($inputs);
 
         return redirect()->route('roles.index')
             ->with('success', 'Registro adicionado com sucesso.');
@@ -61,9 +65,9 @@ class RoleController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($id, FindOneRole $action)
     {
-        $role = Role::findOrFail($id);
+        $role = $action->execute($id);
 
         return view('roles.show', compact('role'));
     }
@@ -74,11 +78,11 @@ class RoleController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit($id, FindOneRole $roleAction, GetAllPermission $permissionAction)
     {
-        $role = Role::findOrFail($id);
+        $role = $roleAction->execute($id);
 
-        $permissions = Permission::orderBy('description')->get();
+        $permissions = $permissionAction->execute();
 
         return view('roles.edit', compact('role', 'permissions'));
     }
@@ -90,17 +94,13 @@ class RoleController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, $id, UpdateRole $action)
     {
-        $role = Role::findOrFail($id);
-
         $this->validate($request, $this->rules($request, $id));
 
-        $inputs = $request->except('permissions');
+        $inputs = $request->all();
 
-        $role->fill($inputs)->save();
-
-        $role->permissions()->sync($request->permissions);
+        $action->execute($id, $inputs);
 
         return redirect()->route('roles.index')
             ->with('success', 'Registro atualizado com sucesso.');
@@ -112,11 +112,11 @@ class RoleController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy($id, DeleteRole $action)
     {
-        $role = Role::findOrFail($id);
         try {
-            $role->delete();
+            $action->execute($id);
+
             return redirect()->route('roles.index')
                 ->with('success', 'Registro atualizado com sucesso.');
         } catch (Exception $e) {
@@ -128,16 +128,10 @@ class RoleController extends Controller
     private function rules(Request $request, $primaryKey = null, bool $changeMessages = false)
     {
         $rules = [
-            'name' => ['required', 'max:15'],
+            'name' => ['required', 'max:40', Rule::unique('roles')->ignore($primaryKey)],
             'description' => ['required', 'string'],
             'permissions' => ['required']
         ];
-
-        if (empty($primaryKey)) {
-            array_push($rules['name'], Rule::unique('roles'));
-        } else {
-            array_push($rules['name'], Rule::unique('roles')->ignore($primaryKey));
-        }
 
         $messages = [];
 

@@ -73,7 +73,7 @@ class PermissionController extends Controller
      */
     public function edit($id, FindOnePermission $action)
     {
-        $permission = $action->execute($id, ['id', 'name', 'description']);
+        $permission = $action->execute($id);
 
         return view('permissions.edit', compact('permission'));
     }

@@ -7,10 +7,10 @@ use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Pagination\LengthAwarePaginator;
 
 /**
- * Interface Permission
+ * Interface Role
  * @package App\Contracts
  */
-interface PermissionRepositoryInterface
+interface RoleRepositoryInterface
 {
     /**
      *  Get paginate resource
@@ -19,12 +19,6 @@ interface PermissionRepositoryInterface
      * @return Collection
      */
     public function getPaginated(int $perPage = 25, $columns = array('*')): LengthAwarePaginator;
-
-    /**
-     *  Get all resources
-     * @return Collection
-     */
-    public function getAll($columns = array('*')): Collection;
 
     /**
      * Get resource

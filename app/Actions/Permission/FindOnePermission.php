@@ -16,9 +16,9 @@ class FindOnePermission
         $this->permissionRepository = $permissionRepository;
     }
 
-    public function execute(int $id, array $columns = array('*')): Model
+    public function execute(int $id): Model
     {
-        $permission = $this->permissionRepository->findOne($id, $columns);
+        $permission = $this->permissionRepository->findOne($id);
 
         if(!$permission) abort(404);
 

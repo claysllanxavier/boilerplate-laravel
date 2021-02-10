@@ -5,8 +5,10 @@ namespace App\Providers;
 use Illuminate\Support\ServiceProvider;
 use App\Contracts\EloquentRepositoryInterface;
 use App\Contracts\PermissionRepositoryInterface;
+use App\Contracts\RoleRepositoryInterface;
 use App\Repositories\Eloquent\BaseRepository;
 use App\Repositories\Eloquent\PermissionRepository;
+use App\Repositories\Eloquent\RoleRepository;
 
 class RepositoryServiceProvider extends ServiceProvider
 {
@@ -17,7 +19,8 @@ class RepositoryServiceProvider extends ServiceProvider
      */
     public $bindings = [
         EloquentRepositoryInterface::class => BaseRepository::class,
-        PermissionRepositoryInterface::class => PermissionRepository::class
+        PermissionRepositoryInterface::class => PermissionRepository::class,
+        RoleRepositoryInterface::class => RoleRepository::class,
     ];
 
     /**

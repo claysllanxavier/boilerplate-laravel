@@ -3,9 +3,9 @@
 namespace App\Actions\Permission;
 
 use App\Contracts\PermissionRepositoryInterface;
-use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Database\Eloquent\Collection;
 
-class ListPaginatedPermission
+class GetAllPermission
 {
 
     protected $permissionRepository;
@@ -16,8 +16,8 @@ class ListPaginatedPermission
         $this->permissionRepository = $permissionRepository;
     }
 
-    public function execute(): LengthAwarePaginator
+    public function execute(): Collection
     {
-        return $this->permissionRepository->getPaginated(25, ['id', 'name', 'description']);
+        return $this->permissionRepository->getAll(['id', 'description']);
     }
 }
