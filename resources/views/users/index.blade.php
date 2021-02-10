@@ -58,11 +58,7 @@
                                     </td>
                                 </tr>
                                 @empty
-                                <tr>
-                                    <td colspan="10" style="text-align: center; font-size: 1.1em;">
-                                        Nenhum informação cadastrado.
-                                    </td>
-                                </tr>
+                                    @include('components.list-empty')
                                 @endforelse
                             </tbody>
                         </table>

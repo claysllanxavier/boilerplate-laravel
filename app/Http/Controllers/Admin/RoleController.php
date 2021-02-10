@@ -54,7 +54,7 @@ class RoleController extends Controller
         $action->execute($inputs);
 
         return redirect()->route('roles.index')
-            ->with('success', 'Registro adicionado com sucesso.');
+            ->with('success', __('messages.created'));
     }
 
     /**
@@ -101,7 +101,7 @@ class RoleController extends Controller
         $action->execute($id, $inputs);
 
         return redirect()->route('roles.index')
-            ->with('success', 'Registro atualizado com sucesso.');
+            ->with('success', __('messages.updated'));
     }
 
     /**
@@ -116,10 +116,10 @@ class RoleController extends Controller
             $action->execute($id);
 
             return redirect()->route('roles.index')
-                ->with('success', 'Registro atualizado com sucesso.');
+                ->with('success', __('messages.deleted'));
         } catch (Exception $e) {
             return redirect()->route('roles.index')
-                ->with('error', 'Não foi possível deletar esse registro.');
+                ->with('error', __('messages.deleted.fail'));
         }
     }
 

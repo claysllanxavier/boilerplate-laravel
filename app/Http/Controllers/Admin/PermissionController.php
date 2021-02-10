@@ -49,7 +49,7 @@ class PermissionController extends Controller
         $action->execute($request->all());
 
         return redirect()->route('permissions.index')
-            ->with('success', 'Registro adicionado com sucesso.');
+            ->with('success', __('messages.created'));
     }
 
     /**
@@ -92,7 +92,7 @@ class PermissionController extends Controller
         $action->execute($id, $request->all());
 
         return redirect()->route('permissions.index')
-            ->with('success', 'Registro atualizado com sucesso.');
+            ->with('success', __('messages.updated'));
     }
 
     /**
@@ -106,10 +106,10 @@ class PermissionController extends Controller
         try {
             $action->execute($id);
             return redirect()->route('permissions.index')
-                ->with('success', 'Registro atualizado com sucesso.');
+                ->with('success', __('messages.deleted'));
         } catch (Exception $e) {
             return redirect()->route('permissions.index')
-                ->with('error', 'Não foi possível deletar esse registro.');
+                ->with('error', __('messages.fail'));
         }
     }
 
