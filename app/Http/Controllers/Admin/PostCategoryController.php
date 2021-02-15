@@ -13,6 +13,15 @@ use App\Http\Requests\PostCategoryRequest;
 
 class PostCategoryController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('permission:post_categories_view', ['only' => ['show', 'index']]);
+        $this->middleware('permission:post_categories_create', ['only' => ['create', 'store']]);
+        $this->middleware('permission:post_categories_edit', ['only' => ['edit', 'update']]);
+        $this->middleware('permission:post_categories_delete', ['only' => ['destroy']]);
+    }
+
+
     /**
      * Display a listing of the resource.
      *
