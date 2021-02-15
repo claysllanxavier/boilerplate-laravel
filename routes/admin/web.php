@@ -76,3 +76,28 @@ Route::group(['prefix' => 'users'], function () {
         ->middleware('permission:users_delete')
         ->name('users.destroy');
 });
+
+/** Post Categories */
+Route::group(['prefix' => 'post-categories'], function () {
+    Route::get('', 'PostCategoryController@index')
+        ->middleware('permission:post_categories_view')
+        ->name('post_categories.index');
+    Route::get('create', 'PostCategoryController@create')
+        ->middleware('permission:post_categories_create')
+        ->name('post_categories.create');
+    Route::post('', 'PostCategoryController@store')
+        ->middleware('permission:post_categories_create')
+        ->name('post_categories.store');
+    Route::get('/{id}', 'PostCategoryController@show')
+        ->middleware('permission:post_categories_view')
+        ->name('post_categories.show');
+    Route::get('/{id}/edit', 'PostCategoryController@edit')
+        ->middleware('permission:post_categories_edit')
+        ->name('post_categories.edit');
+    Route::put('/{id}', 'PostCategoryController@update')
+        ->middleware('permission:post_categories_edit')
+        ->name('post_categories.update');
+    Route::delete('/{id}', 'PostCategoryController@destroy')
+        ->middleware('permission:post_categories_delete')
+        ->name('post_categories.destroy');
+});

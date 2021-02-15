@@ -18,7 +18,11 @@ class Permission extends \Spatie\Permission\Models\Permission
             array('name' => 'users_view', 'description' => 'Visualiza Usuários'),
             array('name' => 'users_create', 'description' => 'Criar Usuário'),
             array('name' => 'users_edit', 'description' => 'Editar Usuário'),
-            array('name' => 'users_delete', 'description' => 'Deleta Usuário')
+            array('name' => 'users_delete', 'description' => 'Deleta Usuário'),
+            array('name' => 'post_categories_view', 'description' => 'Visualiza categoria de notícias'),
+            array('name' => 'post_categories_create', 'description' => 'Criar categoria de notícia'),
+            array('name' => 'post_categories_edit', 'description' => 'Editar categoria de notícia'),
+            array('name' => 'post_categories_delete', 'description' => 'Deleta categoria de notícia')
         ];
     }
 }
