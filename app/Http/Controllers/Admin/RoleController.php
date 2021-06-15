@@ -3,26 +3,33 @@
 namespace App\Http\Controllers\Admin;
 
 use Exception;
-use App\Actions\Permission\GetAllPermission;
-use App\Actions\Role\CreateRole;
-use App\Actions\Role\DeleteRole;
-use App\Actions\Role\FindOneRole;
-use App\Actions\Role\ListPaginatedRole;
-use App\Actions\Role\UpdateRole;
+use App\Contracts\PermissionRepositoryInterface;
+use App\Contracts\RoleRepositoryInterface;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 
 class RoleController extends Controller
 {
+    protected $roleRepository;
+    protected $permissionRepository;
+
+    public function __construct(
+        RoleRepositoryInterface $roleRepository,
+        PermissionRepositoryInterface $permissionRepository
+    ) {
+        $this->roleRepository = $roleRepository;
+        $this->permissionRepository = $permissionRepository;
+    }
+
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(ListPaginatedRole $action)
+    public function index()
     {
-        $roles = $action->execute();
+        $roles = $this->roleRepository->getPaginated();
 
         return view('roles.index', compact('roles'));
     }
@@ -32,9 +39,9 @@ class RoleController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create(GetAllPermission $action)
+    public function create()
     {
-        $permissions =  $action->execute();
+        $permissions =  $this->permissionRepository->getAll(['id', 'description']);
 
         return view('roles.create', compact('permissions'));
     }
@@ -45,13 +52,13 @@ class RoleController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request, CreateRole $action)
+    public function store(Request $request)
     {
         $this->validate($request, $this->rules($request));
 
         $inputs = $request->all();
 
-        $action->execute($inputs);
+        $this->roleRepository->create($inputs);
 
         return redirect()->route('roles.index')
             ->with('success', __('messages.created'));
@@ -63,9 +70,9 @@ class RoleController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id, FindOneRole $action)
+    public function show($id)
     {
-        $role = $action->execute($id);
+        $role = $this->roleRepository->findOne($id);
 
         return view('roles.show', compact('role'));
     }
@@ -76,11 +83,11 @@ class RoleController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id, FindOneRole $roleAction, GetAllPermission $permissionAction)
+    public function edit($id)
     {
-        $role = $roleAction->execute($id);
+        $role = $this->roleRepository->findOne($id);
 
-        $permissions = $permissionAction->execute();
+        $permissions =  $this->permissionRepository->getAll(['id', 'description']);
 
         return view('roles.edit', compact('role', 'permissions'));
     }
@@ -92,13 +99,13 @@ class RoleController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id, UpdateRole $action)
+    public function update(Request $request, $id)
     {
         $this->validate($request, $this->rules($request, $id));
 
         $inputs = $request->all();
 
-        $action->execute($id, $inputs);
+        $this->roleRepository->update($id, $inputs);
 
         return redirect()->route('roles.index')
             ->with('success', __('messages.updated'));
@@ -110,10 +117,10 @@ class RoleController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id, DeleteRole $action)
+    public function destroy($id)
     {
         try {
-            $action->execute($id);
+            $this->roleRepository->delete($id);
 
             return redirect()->route('roles.index')
                 ->with('success', __('messages.deleted'));

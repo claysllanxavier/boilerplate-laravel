@@ -7,6 +7,7 @@ use App\Contracts\RoleRepositoryInterface;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class RoleRepository extends BaseRepository implements RoleRepositoryInterface
 {
@@ -59,10 +60,13 @@ class RoleRepository extends BaseRepository implements RoleRepositoryInterface
      * @param int $id
      * @return Model
      */
-    public function update(int $id, array $attributes): ?bool
+    public function update($id, array $attributes): ?bool
     {
-        $item = $this->model->find($id);
-        if (!$item) null;
+        if (!is_numeric($id)) {
+            throw new ModelNotFoundException();
+        }
+
+        $item = $this->model->findOrFail($id);
 
         $item->fill($attributes)->save();
 

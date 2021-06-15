@@ -22,7 +22,7 @@ Route::group(['prefix' => 'permissions'], function () {
     Route::get('/{id}/edit', [PermissionController::class, 'edit'])
         ->middleware('permission:permissions_edit')
         ->name('permissions.edit');
-    Route::put('/{id}', [PermissionController::class, 'updated'])
+    Route::put('/{id}', [PermissionController::class, 'update'])
         ->middleware('permission:permissions_edit')
         ->name('permissions.update');
     Route::delete('/{id}', [PermissionController::class, 'destroy'])

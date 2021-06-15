@@ -31,7 +31,7 @@ interface PermissionRepositoryInterface
      * @param $id
      * @return Model
      */
-    public function findOne(int $id, $columns = array('*')): ?Model;
+    public function findOne($id, $columns = array('*')): ?Model;
 
     /**
      * @param array $attributes
@@ -42,15 +42,15 @@ interface PermissionRepositoryInterface
     /**
      * Update resource
      * @param array $attributes
-     * @param int $id
+     * @param $id
      * @return Model
      */
-    public function update(int $id, array $attributes): ?bool;
+    public function update($id, array $attributes): ?bool;
 
     /**
      * Delete resource
      * @param $id
      * @return bool
      */
-    public function delete(int $id): ?bool;
+    public function delete($id): ?bool;
 }

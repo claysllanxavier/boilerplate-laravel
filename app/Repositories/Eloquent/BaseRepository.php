@@ -6,8 +6,7 @@ use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Pagination\LengthAwarePaginator;
 use App\Contracts\EloquentRepositoryInterface;
-
-
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class BaseRepository implements EloquentRepositoryInterface
 {
@@ -51,9 +50,13 @@ class BaseRepository implements EloquentRepositoryInterface
      * @param $id
      * @return Model
      */
-    public function findOne(int $id, $columns = array('*')): ?Model
+    public function findOne($id, $columns = array('*')): ?Model
     {
-        return $this->model->find($id, $columns);
+        if (!is_numeric($id)) {
+            throw new ModelNotFoundException();
+        }
+
+        return $this->model->findOrFail($id, $columns);
     }
 
     /**
@@ -71,10 +74,13 @@ class BaseRepository implements EloquentRepositoryInterface
      * @param int $id
      * @return Model
      */
-    public function update(int $id, array $attributes): ?bool
+    public function update($id, array $attributes): ?bool
     {
-        $item = $this->model->find($id);
-        if (!$item) null;
+        if (!is_numeric($id)) {
+            throw new ModelNotFoundException();
+        }
+
+        $item = $this->model->findOrFail($id);
 
         return $item->fill($attributes)->save();
     }
@@ -84,10 +90,13 @@ class BaseRepository implements EloquentRepositoryInterface
      * @param $id
      * @return bool
      */
-    public function delete(int $id): ?bool
+    public function delete($id): ?bool
     {
-        $model = $this->model->find($id);
-        if (!$model) return null;
+        if (!is_numeric($id)) {
+            throw new ModelNotFoundException();
+        }
+
+        $model = $this->model->findOrFail($id);
 
         return $model->delete();
     }

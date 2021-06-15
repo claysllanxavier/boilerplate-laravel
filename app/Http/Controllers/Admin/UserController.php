@@ -2,30 +2,34 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Actions\Role\GetAllRole;
-use App\Actions\User\CreateUser;
-use App\Actions\User\DeleteUser;
-use App\Actions\User\FindOneUser;
-use App\Actions\User\ListPaginatedUser;
-use App\Actions\User\UpdateUser;
+use App\Contracts\RoleRepositoryInterface;
+use App\Contracts\UserRepositoryInterface;
 use Exception;
-use App\Models\Role;
-use App\Models\User;
 use App\Http\Controllers\Controller;
-use App\Rules\Cpf;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 
 class UserController extends Controller
 {
+    protected $userRepository;
+    protected $roleRepository;
+
+    public function __construct(
+        UserRepositoryInterface $userRepository,
+        RoleRepositoryInterface $roleRepository
+    ) {
+        $this->userRepository = $userRepository;
+        $this->roleRepository = $roleRepository;
+    }
+
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(ListPaginatedUser $action)
+    public function index()
     {
-        $users = $action->execute();
+        $users = $this->userRepository->getPaginated();
 
         return view('users.index', compact('users'));
     }
@@ -35,9 +39,9 @@ class UserController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create(GetAllRole $action)
+    public function create()
     {
-        $roles = $action->execute();
+        $roles = $this->roleRepository->getAll();
 
         return view('users.create', compact('roles'));
     }
@@ -48,14 +52,14 @@ class UserController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request, CreateUser $action)
+    public function store(Request $request)
     {
         $this->validate($request, $this->rules($request));
 
         $inputs = $request->except('password');
         $inputs['password'] = bcrypt($request->password);
 
-        $action->execute($inputs);
+        $this->userRepository->create($inputs);
 
         return redirect()->route('users.index')
             ->with('success', __('messages.created'));
@@ -67,9 +71,9 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id, FindOneUser $action)
+    public function show($id)
     {
-        $user = $action->execute($id);
+        $user = $this->userRepository->findOne($id);
 
         return view('users.show', compact('user'));
     }
@@ -80,11 +84,11 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id, FindOneUser $action, GetAllRole $roleAction)
+    public function edit($id)
     {
-        $user = $action->execute($id);
+        $user = $this->userRepository->findOne($id);
 
-        $roles = $roleAction->execute();
+        $roles = $this->roleRepository->getAll();
 
         return view('users.edit', compact('user', 'roles'));
     }
@@ -96,13 +100,13 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id, UpdateUser $action)
+    public function update(Request $request, $id)
     {
         $this->validate($request, $this->rules($request, $id));
 
         $inputs = $request->all();
 
-        $action->execute($id, $inputs);
+        $this->userRepository->update($id, $inputs);
 
         return redirect()->route('users.index')
             ->with('success', __('messages.updated'));
@@ -114,10 +118,10 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id, DeleteUser $action)
+    public function destroy($id)
     {
         try {
-            $action->execute($id);
+            $this->userRepository->delete($id);
             return redirect()->route('users.index')
                 ->with('success', __('messages.deleted'));
         } catch (Exception $e) {

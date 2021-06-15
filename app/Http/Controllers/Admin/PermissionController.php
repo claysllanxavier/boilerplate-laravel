@@ -4,24 +4,28 @@ namespace App\Http\Controllers\Admin;
 
 use Exception;
 use App\Http\Controllers\Controller;
-use App\Actions\Permission\ListPaginatedPermission;
-use App\Actions\Permission\CreatePermission;
-use App\Actions\Permission\FindOnePermission;
-use App\Actions\Permission\UpdatePermission;
-use App\Actions\Permission\DeletePermission;
+use App\Contracts\PermissionRepositoryInterface;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 
 class PermissionController extends Controller
 {
+    protected $permissionRepository;
+
+    public function __construct(
+        PermissionRepositoryInterface $permissionRepository
+    ) {
+        $this->permissionRepository = $permissionRepository;
+    }
+
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(ListPaginatedPermission $action)
+    public function index()
     {
-        $permissions = $action->execute();
+        $permissions = $this->permissionRepository->getPaginated();
 
         return view('permissions.index', compact('permissions'));
     }
@@ -42,11 +46,12 @@ class PermissionController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request, CreatePermission $action)
+    public function store(Request $request)
     {
         $this->validate($request, $this->rules($request));
 
-        $action->execute($request->all());
+        $inputs = $request->all();
+        $this->permissionRepository->create($inputs);
 
         return redirect()->route('permissions.index')
             ->with('success', __('messages.created'));
@@ -58,9 +63,9 @@ class PermissionController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id, FindOnePermission $action)
+    public function show($id)
     {
-        $permission = $action->execute($id);
+        $permission = $this->permissionRepository->findOne($id);
 
         return view('permissions.show', compact('permission'));
     }
@@ -71,9 +76,9 @@ class PermissionController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id, FindOnePermission $action)
+    public function edit($id)
     {
-        $permission = $action->execute($id);
+        $permission = $this->permissionRepository->findOne($id);
 
         return view('permissions.edit', compact('permission'));
     }
@@ -85,11 +90,13 @@ class PermissionController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id, UpdatePermission $action)
+    public function update(Request $request, $id)
     {
         $this->validate($request, $this->rules($request, $id));
 
-        $action->execute($id, $request->all());
+        $inputs = $request->all();
+
+        $this->permissionRepository->update($id, $inputs);
 
         return redirect()->route('permissions.index')
             ->with('success', __('messages.updated'));
@@ -101,10 +108,10 @@ class PermissionController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id, DeletePermission $action)
+    public function destroy($id)
     {
         try {
-            $action->execute($id);
+            $this->permissionRepository->delete($id);
             return redirect()->route('permissions.index')
                 ->with('success', __('messages.deleted'));
         } catch (Exception $e) {

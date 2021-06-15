@@ -3,16 +3,6 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
-use App\Contracts\EloquentRepositoryInterface;
-use App\Contracts\PermissionRepositoryInterface;
-use App\Contracts\RoleRepositoryInterface;
-use App\Contracts\UserRepositoryInterface;
-use App\Repositories\Eloquent\BaseRepository;
-use App\Repositories\Eloquent\PermissionRepository;
-use App\Repositories\Eloquent\RoleRepository;
-use App\Repositories\Eloquent\UserRepository;
-use App\Contracts\PostCategoryRepositoryInterface;
-use App\Repositories\Eloquent\PostCategoryRepository;
 
 class RepositoryServiceProvider extends ServiceProvider
 {
@@ -22,11 +12,10 @@ class RepositoryServiceProvider extends ServiceProvider
      * @var array
      */
     public $bindings = [
-        EloquentRepositoryInterface::class => BaseRepository::class,
-        PermissionRepositoryInterface::class => PermissionRepository::class,
-        RoleRepositoryInterface::class => RoleRepository::class,
-        UserRepositoryInterface::class => UserRepository::class,
-        PostCategoryRepositoryInterface::class => PostCategoryRepository::class,
+        "App\Contracts\EloquentRepositoryInterface" => "App\Repositories\Eloquent\BaseRepository",
+        "App\Contracts\PermissionRepositoryInterface" => "App\Repositories\Eloquent\PermissionRepository",
+        "App\Contracts\RoleRepositoryInterface" => "App\Repositories\Eloquent\RoleRepository",
+        "App\Contracts\UserRepositoryInterface" => "App\Repositories\Eloquent\UserRepository",
     ];
 
     /**

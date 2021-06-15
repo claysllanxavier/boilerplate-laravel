@@ -6,6 +6,7 @@ use App\Models\User;
 use App\Contracts\UserRepositoryInterface;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class UserRepository extends BaseRepository implements UserRepositoryInterface
 {
@@ -25,7 +26,6 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
     public function getPaginated(int $perPage = 25, $columns = array('*')): LengthAwarePaginator
     {
         return $this->model->role()
-            ->where('users.id', '!=', auth()->id())
             ->orderBy('users.name')
             ->paginate($perPage, $columns);
     }
@@ -51,21 +51,28 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
      * @param $id
      * @return Model
      */
-    public function findOne(int $id, $columns = array('*')): ?Model
+    public function findOne($id, $columns = array('*')): ?Model
     {
-        return $this->model->role()->find($id, $columns);
+        if (!is_numeric($id)) {
+            throw new ModelNotFoundException();
+        }
+
+        return $this->model->role()->findOrFail($id, $columns);
     }
 
     /**
      * Update resource
      * @param array $attributes
-     * @param int $id
+     * @param $id
      * @return Model
      */
-    public function update(int $id, array $attributes): ?bool
+    public function update($id, array $attributes): ?bool
     {
-        $item = $this->model->find($id);
-        if (!$item) null;
+        if (!is_numeric($id)) {
+            throw new ModelNotFoundException();
+        }
+
+        $item = $this->model->findOrFail($id);
 
         $item->fill($attributes)->save();
 
