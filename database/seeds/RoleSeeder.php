@@ -1,5 +1,7 @@
 <?php
 
+namespace Database\Seeders;
+
 use App\Models\Role;
 use App\Models\Permission;
 use Illuminate\Database\Seeder;
@@ -19,7 +21,10 @@ class RoleSeeder extends Seeder
     private function createRoles()
     {
 
-        $role = Role::firstOrCreate(['name' => 'administrador'], ['description' => 'Administrador']);
+        $role = Role::firstOrCreate(
+            ['name' => 'administrador'],
+            ['description' => 'Administrador']
+        );
 
         $role->permissions()->sync(Permission::all());
 
