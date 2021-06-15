@@ -3,7 +3,7 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
-use Illuminate\Support\FacadesDB;
+use Illuminate\Support\Facades\DB;
 
 class CitySeeder extends Seeder
 {
