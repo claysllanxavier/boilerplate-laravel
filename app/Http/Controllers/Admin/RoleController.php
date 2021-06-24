@@ -11,16 +11,10 @@ use Illuminate\Validation\Rule;
 
 class RoleController extends Controller
 {
-    protected $roleRepository;
-    protected $permissionRepository;
-
     public function __construct(
-        RoleRepositoryInterface $roleRepository,
-        PermissionRepositoryInterface $permissionRepository
-    ) {
-        $this->roleRepository = $roleRepository;
-        $this->permissionRepository = $permissionRepository;
-    }
+        protected RoleRepositoryInterface $roleRepository,
+        protected PermissionRepositoryInterface $permissionRepository
+    ) {}
 
     /**
      * Display a listing of the resource.

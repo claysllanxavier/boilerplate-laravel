@@ -10,13 +10,10 @@ use Illuminate\Validation\Rule;
 
 class PermissionController extends Controller
 {
-    protected $permissionRepository;
 
     public function __construct(
-        PermissionRepositoryInterface $permissionRepository
-    ) {
-        $this->permissionRepository = $permissionRepository;
-    }
+        protected PermissionRepositoryInterface $permissionRepository
+    ) {}
 
     /**
      * Display a listing of the resource.

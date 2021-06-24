@@ -10,9 +10,7 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class UserRepository extends BaseRepository implements UserRepositoryInterface
 {
-    protected $user;
-
-    public function __construct(User $user)
+    public function __construct(protected User $user)
     {
         parent::__construct($user);
     }

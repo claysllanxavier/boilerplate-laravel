@@ -9,9 +9,7 @@ use Illuminate\Database\Eloquent\Collection;
 
 class PermissionRepository extends BaseRepository implements PermissionRepositoryInterface
 {
-    protected $permission;
-
-    public function __construct(Permission $permission)
+    public function __construct(protected Permission $permission)
     {
         parent::__construct($permission);
     }

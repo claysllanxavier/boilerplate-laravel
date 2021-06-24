@@ -11,19 +11,12 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 class BaseRepository implements EloquentRepositoryInterface
 {
     /**
-     * @var Model
-     */
-    protected $model;
-
-    /**
      * BaseRepository constructor.
      *
      * @param Model $model
      */
-    protected function __construct(Model $model)
-    {
-        $this->model = $model;
-    }
+    protected function __construct(protected Model $model)
+    {}
 
     /**
      *  Get all resources

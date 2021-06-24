@@ -11,9 +11,7 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class RoleRepository extends BaseRepository implements RoleRepositoryInterface
 {
-    protected $role;
-
-    public function __construct(Role $role)
+    public function __construct(protected Role $role)
     {
         parent::__construct($role);
     }
