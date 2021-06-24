@@ -84,7 +84,7 @@
                                     <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
                                     Perfil
                                 </a>
-                                <a class="dropdown-item" href="#">
+                                <a class="dropdown-item" href="{{ route('change-password.edit') }}">
                                     <i class="fas fa-lock fa-sm fa-fw mr-2 text-gray-400"></i>
                                     Alterar Senha
                                 </a>

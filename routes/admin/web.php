@@ -1,9 +1,19 @@
 <?php
 
+use App\Http\Controllers\Admin\ChangePasswordController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\PermissionController;
 use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\Admin\UserController;
+
+
+/** Change Password */
+Route::group(['prefix' => 'change-password'], function () {
+    Route::get('', [ChangePasswordController::class, 'edit'])
+        ->name('change-password.edit');
+    Route::put('', [ChangePasswordController::class, 'update'])
+        ->name('change-password.update');
+});
 
 /** Permissions */
 Route::group(['prefix' => 'permissions'], function () {
