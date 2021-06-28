@@ -29,5 +29,10 @@ class RoleSeeder extends Seeder
         $role->permissions()->sync(Permission::all());
 
         $this->command->info('Admin will have full rights');
+
+        Role::firstOrCreate(
+            ['name' => 'user_app'],
+            ['description' => 'Usuário APP']
+        );
     }
 }
