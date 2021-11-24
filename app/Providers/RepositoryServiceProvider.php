@@ -12,10 +12,7 @@ class RepositoryServiceProvider extends ServiceProvider
      * @var array
      */
     public $bindings = [
-        "App\Contracts\EloquentRepositoryInterface" => "App\Repositories\Eloquent\BaseRepository",
-        "App\Contracts\PermissionRepositoryInterface" => "App\Repositories\Eloquent\PermissionRepository",
-        "App\Contracts\RoleRepositoryInterface" => "App\Repositories\Eloquent\RoleRepository",
-        "App\Contracts\UserRepositoryInterface" => "App\Repositories\Eloquent\UserRepository",
+
     ];
 
     /**

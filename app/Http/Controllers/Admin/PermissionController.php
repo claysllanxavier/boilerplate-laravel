@@ -4,16 +4,20 @@ namespace App\Http\Controllers\Admin;
 
 use Exception;
 use App\Http\Controllers\Controller;
-use App\Contracts\PermissionRepositoryInterface;
+use App\Repositories\Eloquent\PermissionRepository;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 
 class PermissionController extends Controller
 {
 
+    protected $permissionRepository;
+
     public function __construct(
-        protected PermissionRepositoryInterface $permissionRepository
-    ) {}
+        PermissionRepository $permissionRepository
+    ) {
+        $this->permissionRepository = $permissionRepository;
+    }
 
     /**
      * Display a listing of the resource.

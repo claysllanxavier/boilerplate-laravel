@@ -3,13 +3,12 @@
 namespace App\Repositories\Eloquent;
 
 use App\Models\Permission;
-use App\Contracts\PermissionRepositoryInterface;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Collection;
 
-class PermissionRepository extends BaseRepository implements PermissionRepositoryInterface
-{
-    public function __construct(protected Permission $permission)
+class PermissionRepository extends BaseRepository{
+
+    public function __construct(Permission $permission)
     {
         parent::__construct($permission);
     }
@@ -25,7 +24,7 @@ class PermissionRepository extends BaseRepository implements PermissionRepositor
         return $this->model->orderBy('description')->paginate($perPage, $columns);
     }
 
-     /**
+    /**
      *  Get all resources
      * @return Collection
      */

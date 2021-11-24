@@ -5,18 +5,21 @@ namespace App\Repositories\Eloquent;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Pagination\LengthAwarePaginator;
-use App\Contracts\EloquentRepositoryInterface;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
-class BaseRepository implements EloquentRepositoryInterface
+class BaseRepository
 {
+    protected $model;
+
     /**
      * BaseRepository constructor.
      *
      * @param Model $model
      */
-    protected function __construct(protected Model $model)
-    {}
+    protected function __construct(Model $model)
+    {
+        $this->model = $model;
+    }
 
     /**
      *  Get all resources

@@ -2,20 +2,27 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Contracts\RoleRepositoryInterface;
-use App\Contracts\UserRepositoryInterface;
+
 use Exception;
 use App\Http\Controllers\Controller;
+use App\Repositories\Eloquent\RoleRepository;
+use App\Repositories\Eloquent\UserRepository;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 
 class UserController extends Controller
 {
 
+    protected  $userRepository;
+    protected  $roleRepository;
+
     public function __construct(
-        protected UserRepositoryInterface $userRepository,
-        protected RoleRepositoryInterface $roleRepository
-    ) {}
+        UserRepository $userRepository,
+        RoleRepository $roleRepository
+    ) {
+        $this->userRepository =  $userRepository;
+        $this->roleRepository =  $roleRepository;
+    }
 
     /**
      * Display a listing of the resource.

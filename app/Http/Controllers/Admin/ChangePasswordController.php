@@ -2,16 +2,19 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Contracts\UserRepositoryInterface;
 use App\Http\Controllers\Controller;
+use App\Repositories\Eloquent\UserRepository;
 use App\Rules\MatchOldPassword;
 use Illuminate\Http\Request;
 
 class ChangePasswordController extends Controller
 {
+    protected $userRepository;
+
     public function __construct(
-        protected UserRepositoryInterface $userRepository,
+        UserRepository $userRepository
     ) {
+        $this->userRepository = $userRepository;
     }
     /**
      * Show the form for editing the specified resource.

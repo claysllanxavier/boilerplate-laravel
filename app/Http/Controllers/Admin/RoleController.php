@@ -3,18 +3,24 @@
 namespace App\Http\Controllers\Admin;
 
 use Exception;
-use App\Contracts\PermissionRepositoryInterface;
-use App\Contracts\RoleRepositoryInterface;
 use App\Http\Controllers\Controller;
+use App\Repositories\Eloquent\PermissionRepository;
+use App\Repositories\Eloquent\RoleRepository;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 
 class RoleController extends Controller
 {
+    protected $roleRepository;
+    protected $permissionRepository;
+
     public function __construct(
-        protected RoleRepositoryInterface $roleRepository,
-        protected PermissionRepositoryInterface $permissionRepository
-    ) {}
+        RoleRepository $roleRepository,
+        PermissionRepository $permissionRepository
+    ) {
+        $this->roleRepository = $roleRepository;
+        $this->permissionRepository = $permissionRepository;
+    }
 
     /**
      * Display a listing of the resource.

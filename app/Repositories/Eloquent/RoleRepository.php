@@ -3,15 +3,14 @@
 namespace App\Repositories\Eloquent;
 
 use App\Models\Role;
-use App\Contracts\RoleRepositoryInterface;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
-class RoleRepository extends BaseRepository implements RoleRepositoryInterface
+class RoleRepository extends BaseRepository
 {
-    public function __construct(protected Role $role)
+    public function __construct(Role $role)
     {
         parent::__construct($role);
     }

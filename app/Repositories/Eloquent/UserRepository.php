@@ -3,14 +3,13 @@
 namespace App\Repositories\Eloquent;
 
 use App\Models\User;
-use App\Contracts\UserRepositoryInterface;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
-class UserRepository extends BaseRepository implements UserRepositoryInterface
+class UserRepository extends BaseRepository
 {
-    public function __construct(protected User $user)
+    public function __construct(User $user)
     {
         parent::__construct($user);
     }

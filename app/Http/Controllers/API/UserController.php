@@ -2,16 +2,19 @@
 
 namespace App\Http\Controllers\API;
 
-use App\Contracts\UserRepositoryInterface;
 use App\Http\Controllers\Controller;
+use App\Repositories\Eloquent\UserRepository;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 
 class UserController extends BaseController
 {
+    protected $userRepository;
+
     public function __construct(
-        protected UserRepositoryInterface $userRepository
+        UserRepository $userRepository
     ) {
+        $this->userRepository = $userRepository;
     }
 
     /**
